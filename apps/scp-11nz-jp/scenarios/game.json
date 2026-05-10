@@ -1,0 +1,2129 @@
+{
+  "title": "SCP-11NZ-JP",
+  "startScene": "intro-letter",
+  "baseResolution": {
+    "width": 390,
+    "height": 844
+  },
+  "initialState": {
+    "flags": {},
+    "counters": {
+      "hiraragi_login_attempts": 0
+    },
+    "items": [],
+    "currentPart": 1,
+    "notices": {
+      "ogari": [],
+      "hiraragi": []
+    },
+    "itemAcquisitions": {}
+  },
+  "scenes": {
+    "start": {
+      "id": "start",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "気がつくと、見覚えのない部屋にいた。",
+          "speed": 40
+        },
+        {
+          "text": "手元にはIDカードがある。",
+          "speed": 40
+        },
+        {
+          "text": "まずは自分のIDカードで端末にログインしてみよう。",
+          "speed": 40
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "login-ogari"
+      }
+    },
+    "login-ogari": {
+      "id": "login-ogari",
+      "type": "webpage",
+      "template": "scp-login",
+      "title": "SCiPNET ログイン",
+      "fields": {
+        "username": {
+          "value": "ogari",
+          "editable": false
+        },
+        "password": {
+          "value": "********",
+          "editable": false
+        }
+      },
+      "actions": {
+        "login": {
+          "type": "sequence",
+          "steps": [
+            {
+              "type": "set_flag",
+              "flag": "logged_in_ogari",
+              "value": true
+            },
+            {
+              "type": "conditional",
+              "condition": {
+                "type": "flag",
+                "flag": "meme_counter_inoculated",
+                "value": true
+              },
+              "then": {
+                "type": "navigate",
+                "target": "personal-ogari"
+              },
+              "else": {
+                "type": "navigate",
+                "target": "meme-inoculation"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "meme-inoculation": {
+      "id": "meme-inoculation",
+      "type": "webpage",
+      "template": "scp-alert",
+      "title": "警告",
+      "sections": [
+        {
+          "id": "alert-message",
+          "default": "from: 記録・情報保安管理局（RAISA）\n尾狩研究員　様\n\nクリアランスレベル3の付与に伴い、クラス3ミーム殺害エージェントへの対抗ミームの接種が行われます。\nそのまま待機し、対抗ミームの接種を行ってください。"
+        }
+      ],
+      "links": [
+        {
+          "label": "対抗ミームを摂取する",
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "対抗ミーム摂取中……",
+                    "speed": 60
+                  },
+                  {
+                    "text": "対抗ミームの接種が完了しました。",
+                    "speed": 40
+                  }
+                ]
+              },
+              {
+                "type": "set_flag",
+                "flag": "meme_counter_inoculated",
+                "value": true
+              },
+              {
+                "type": "navigate",
+                "target": "personal-ogari"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "personal-ogari": {
+      "id": "personal-ogari",
+      "type": "webpage",
+      "template": "scp-personal",
+      "title": "尾狩研究員 個人ページ",
+      "links": [
+        {
+          "label": "SCP-11NZ-JP 報告書",
+          "target": "report-ogari"
+        },
+        {
+          "label": "SCP-11NZ-JP 実験記録",
+          "target": "experiment-log"
+        },
+        {
+          "label": "お知らせ",
+          "target": "notices-ogari"
+        },
+        {
+          "label": "解答フォーム",
+          "action": {
+            "type": "modal",
+            "modalId": "answer-part1-1"
+          },
+          "availableWhen": {
+            "type": "not",
+            "condition": {
+              "type": "flag",
+              "flag": "part1_1_cleared",
+              "value": true
+            }
+          }
+        },
+        {
+          "label": "SCP-11NZ-JP 対抗ミーム開発ページ",
+          "target": "meme-dev-page"
+        },
+        {
+          "label": "🔓 鉄錆の果実教団 - チャット",
+          "target": "terrorist-chat",
+          "availableWhen": {
+            "type": "flag",
+            "flag": "logged_in_terrorist",
+            "value": true
+          }
+        },
+        {
+          "label": "← 部屋に戻る",
+          "target": "room-explore",
+          "availableWhen": {
+            "type": "visited",
+            "sceneId": "room-explore"
+          }
+        },
+        {
+          "label": "📜 辞令",
+          "target": "intro-letter"
+        },
+        {
+          "label": "↺ ログアウト",
+          "target": "pc-account-select"
+        }
+      ],
+      "modals": {
+        "answer-part1-1": {
+          "type": "form",
+          "title": "パート1 解答フォーム",
+          "description": "報告書を読んで、空欄を埋めてください。",
+          "fields": [
+            {
+              "id": "s1",
+              "inputType": "sentence",
+              "template": "SCP-11NZ-JPは{a}する{b}である。",
+              "blanks": {
+                "a": {
+                  "id": "q1",
+                  "placeholder": "",
+                  "width": "80px"
+                },
+                "b": {
+                  "id": "q2",
+                  "placeholder": "",
+                  "width": "100px"
+                }
+              }
+            },
+            {
+              "id": "s2",
+              "inputType": "sentence",
+              "template": "SCP-11NZ-JPに曝露すると{a}実体についての記憶が挿入される。",
+              "blanks": {
+                "a": {
+                  "id": "q3",
+                  "placeholder": "",
+                  "width": "80px"
+                }
+              }
+            },
+            {
+              "id": "s3",
+              "inputType": "sentence",
+              "template": "SCP-11NZ-JPは要注意団体GoI-2722（\"{a}\"）から回収された。",
+              "blanks": {
+                "a": {
+                  "id": "q4",
+                  "placeholder": "",
+                  "width": "180px"
+                }
+              }
+            }
+          ],
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "",
+            "corrects": {
+              "q1": "伝染",
+              "q2": "過誤記憶",
+              "q3": "人型",
+              "q4": "鉄錆の果実教団"
+            },
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "part1_1_cleared",
+                  "value": true
+                },
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "オブジェクトの概要は何となくわかった。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "だが、これだけではどうしてこんな状況になってしまったのかわからない。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "もっと情報が必要だ。部屋の様子を調べてみよう。",
+                      "speed": 40
+                    }
+                  ]
+                },
+                {
+                  "type": "navigate",
+                  "target": "room-explore"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "何かが間違っている気がする。",
+                  "speed": 40
+                },
+                {
+                  "text": "もう一度報告書を読んでみよう。",
+                  "speed": 40
+                }
+              ]
+            }
+          }
+        }
+      },
+      "onEnter": {
+        "type": "conditional",
+        "condition": {
+          "type": "current_part",
+          "op": "eq",
+          "value": 2
+        },
+        "then": {
+          "type": "add_notice",
+          "target": "ogari",
+          "noticeId": "terrorist-msg-ogari",
+          "content": "20██-11-13 19:██:██\nfrom: 險倬鹸繝ｻ諠??菫晏ｮ臥ｮ｡逅?ｱ?\n\n予定通りSCP-11NZ-JPの収容違反を発生させた。\n各員は定められたルートでサイト-81NZから脱出しろ。\n情報共有は以下のサイトで行う。\n\n[リンク: terrorist-login | ▶ 暗号化通信ネットワークへアクセス]\n\nログイン時の鍵はSCP-11NZ-JPのクリアランスレベル1向け報告書に記載してある。\n事前に特殊ミームを摂取した諸君なら見えるはずだ。\nもし財団潜入中の記憶処理で特殊ミームが失われたものは\n例のメモに従ってSCP-11NZ-JP対抗ミームのページから再接種しろ。"
+        },
+        "else": {
+          "type": "noop"
+        }
+      }
+    },
+    "report-ogari": {
+      "id": "report-ogari",
+      "type": "webpage",
+      "template": "scp-report",
+      "title": "SCP-11NZ-JP",
+      "sections": [
+        {
+          "id": "main-content",
+          "default": "[太字: オブジェクトクラス]: Euclid\n\n[太字: 特別収容プロトコル]\nSCP-11NZ-JPの担当エージェントは警察機関に報告されたストーカーや覗き行為の被害者を調査し、その原因がSCP-11NZ-JPに由来していた場合は記憶処理を行ってください。SCP-11NZ-JPに関する情報を監視するため、財団のウェブクローラによって出版物やインターネットは監視されます。SCP-11NZ-JPに曝露した人物は拘束され、周囲への曝露状況の調査が行われたのち記憶処理が行われます。\nまた機動部隊く-12（アンチラスト）はGoI-2722（\"鉄錆の果実教団\"）への調査を継続し、SCP-11NZ-JPに関する情報を収集してください。\n\n[太字: 説明]\nSCP-11NZ-JPは伝染性を有する過誤記憶（起こっていないことを覚えていたり、起こったこととは全く違うことを覚えていたりする現象。個人のエピソード記憶に生じる誤った記憶であるが、この記憶を記述する本人には誤ったものであるという自覚がなく、事実であると認識する）です。SCP-11NZ-JPはその具体的な内容と、全てのSCP-11NZ-JPに共通する人物の名称を認識することで伝播します。曝露者はSCP-11NZ-JPを過去に体験した一連の記憶として想起し、その内容を自らの実体験であると確信します。\n\nSCP-11NZ-JPに曝露した人物のエピソード記憶には「[情報災害指定]」と呼称される人型実体についての記憶が挿入されます。この異常性は曝露した時点を基準として10年程度前から直近数か月の記憶で発生します。[情報災害指定]は建造物や樹木などに半身を隠した状態で、曝露者を凝視する存在として想起されます。ほとんどの曝露者にとって[情報災害指定]は恐怖の対象であり、SCP-11NZ-JPの曝露によって死角への不安やストレスの増加が認められます。また、すべてのSCP-11NZ-JP事例において曝露者は[情報災害指定]出現のさい火が燃えるような音を知覚します。曝露者は直近数日間の記憶の有意な健忘が生じますが、原因は明らかになっていません。[情報災害指定]の外見的特徴について曝露者が説明する事は困難であり、その詳細な容姿は明らかになっていません。しかし土気色の肌や3m近い長身、地面に着くほどの長い髪などは共通しています。\n\n[画像: /images/items/report-image.png]\n簡易記憶改変装置によって出力された曝露者の記憶。中央左に[情報災害指定]が写っている（検閲済み）\n\nSCP-11NZ-JPは20██/10/16正午に行われた要注意団体GoI-2722（\"鉄錆の果実教団\"）への襲撃によって発見されました。SCP-11NZ-JPは当該組織の協力団体によって開発されましたが、その経緯や手段、目的などを示す痕跡は発見されず未だ不明な点が多く残されています。当該組織内では「オオワラシ（大童子）」という呼称を用いてSCP-11NZ-JPを取り扱っていました。\n\nSCP-11NZ-JPに関係する実験を申請する際は、担当職員である平良木研究員の許可が必要です。\n\n[太字: 補遺1]\nインシデント11NZ-JPを受け、記憶補強薬を用いた実験は無期限に凍結されます。",
+          "variants": [
+            {
+              "condition": {
+                "type": "flag",
+                "flag": "special_meme_active",
+                "value": true
+              },
+              "content": "[太字: オブジェクトクラス]: Euclid\n\n[太字: 特別収容プロトコル]\nSCP-11NZ-JPの担当[赤文字: エ]ージェントは警察機関に報告されたストーカーや覗き行為の被害者を調査し、その原因がSCP-11NZ-JPに由来していた場合は記憶処理を行ってください。SCP-11NZ-JPに関する情報を監視するため、財団のウェブクローラによって出版物やインターネットは監視されます。SCP-11NZ-JPに曝露した人物は拘束され、周囲への曝露状況の調査が行われたのち記憶処理が行われます。\nまた機動部隊く-12（アンチラスト）はGoI-2722（\"鉄錆の果実教団\"）への調査を継続し、SCP-11NZ-JPに関する情報を収集してください。\n\n[太字: 説明]\nSCP-11NZ-JPは伝染性を有する過誤記憶（起こっていないことを覚えていたり、起こったこととは全く違うことを覚えていたりする現象。個人のエピソード記憶に生じる誤った記憶であるが、この記憶を記述する本人には誤ったものであるという自覚がなく、事実であると認識する）です。SCP-11NZ-JPはその具体的な内容と、全てのSCP-11NZ-JPに共通する人物の名称を認識することで伝播します。曝露者はSCP-11NZ-JPを過去に体験した一連の記憶として想起し、その内容を自らの実体験であると確信します。\n\nSCP-11NZ-JPに曝露した人物のエピソード記憶には「[情報災害指定]」と呼称される人型実体についての記憶が挿入されます。この異常性は曝露した時点を基準として10年程度前から直近数か月の記憶で発生します。[情報災害指定]は建造物や樹木などに半身を隠した状態で、曝露者を凝視する存在として想起されます。ほとんどの曝露者にとって[情報災害指定]は恐怖の対象であり、SCP-11NZ-JPの曝露によって死角への[赤文字: 不]安やストレスの増加が認められます。また、すべてのSCP-11NZ-JP事例において曝露者は[情報災害指定]出現のさい火が燃えるような音を知覚します。曝露者は直近数日間の記憶の有意な健忘が生じますが、原因は明らかになって[赤文字: い]ません。[情報災害指定]の外見的特徴について曝露者が説明する事は困難であり、その詳細な容姿は明らかになって[赤文字: い]ません。しかし土気色の肌や3m近い長身、地面に着くほどの長い髪などは共通しています。\n\n[画像: /images/items/report-image.png]\n簡易記憶改変装置によって出力された曝露者の記憶。中央左に[情報災害指定]が写っている（検閲済み）\n\nSCP-11NZ-JPは20██/10/16正午に行われた要注意団体GoI-2722（\"鉄錆の果実教団\"）への襲撃によって発見されました。SCP-11NZ-JPは当該組織の協力団体によって開発されましたが、その経緯や手段、目的などを示す痕跡は発見されず未だ不明な点が多く残されています。当該組織内では「[赤文字: オオ]ワラシ（大童子）」という呼称を用いてSCP-11NZ-JPを取り扱っていました。\n\nSCP-11NZ-JPに関係する実験を申請する際は、担当職員である平良木研究員の許可が必要です。\n\n[太字: 補遺1]\nインシデント11NZ-JPを受け、記憶補強薬を用いた実験は無期限に凍結されます。"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-ogari"
+        }
+      ]
+    },
+    "experiment-log": {
+      "id": "experiment-log",
+      "type": "webpage",
+      "template": "scp-report",
+      "title": "実験記録11NZ-JP",
+      "sections": [
+        {
+          "id": "exp-001",
+          "default": "実験 11NZ-JP-001\n\n日付: 20██/08/02\nステータス: 承認済み、実験完了\n\n目的: 簡易記憶改変装置を用いて[情報災害指定]の姿を出力する。\n\n実験機材: 簡易記憶改変装置\n\n[画像: /images/items/memory-device.jpg]\n\n手続: 簡易記憶改変装置を用いてSCP-11NZ-JP曝露者の記憶を画像出力し、[情報災害指定]の外見的特徴を観察した。\n\n結果: 簡易記憶改変装置は問題なく曝露者の記憶を出力しました。出力された画像には[情報災害指定]と推測される、半身を隠した身長3m程度の人型実体が描写されていました。しかしながらこの実体の周辺のみ解像度が低く、その詳細な容姿は不明です。また、この画像の閲覧によってSCP-11NZ-JPに曝露することが判明しました。\n\n分析: 簡易記憶改変装置によって出力された画像は、曝露者の記憶を正確に反映したものである。このことからSCP-11NZ-JPによって挿入される[情報災害指定]の外見は曝露者が鮮明に想起できない、もしくは意図的に想起していない可能性がある。\n\n補足: 簡易記憶改変装置は被験者のエピソード記憶について選択的に削除、改変を行うことが可能である。また、被験者の記憶を画像・動画など視覚的な形式で出力することが可能であり、記憶に関係するオブジェクトの研究にも用いられる。"
+        },
+        {
+          "id": "exp-002",
+          "default": "実験 11NZ-JP-002\n\n日付: 20██/08/09\nステータス: 承認済み、実験完了\n\n目的: 記憶処理がSCP-11NZ-JPに対して与える影響を調査する。\n\n実験機材: クラスC・標的型健忘処理薬\n\n手続: SCP-11NZ-JPに曝露した人物に対し、クラスC記憶処理薬を投与してSCP-11NZ-JPについての記憶を除去する。\n\n結果: 記憶処理後、曝露者は一時的にSCP-11NZ-JPの影響から脱したように見られた。しかしながら処理後72時間程度で「誰かに見られているような気がする」という不安感やストレスを主張するようになった。\n\n分析: 記憶処理によってSCP-11NZ-JPの影響をある程度制限することは可能である。若干のストレスは残るものの、非異常性の精神疾患と同程度である。"
+        },
+        {
+          "id": "exp-003",
+          "default": "実験 11NZ-JP-003\n\n日付: 20██/08/19\nステータス: 承認済み、実験完了\n\n目的: 記憶改変がSCP-11NZ-JPに対して与える影響を調査する。\n\n実験機材: 簡易記憶改変装置\n\n手続: SCP-11NZ-JPに曝露した人物に対し、記憶の改変を行った。対象は「勤務地であるサイト-81NZの食堂において窓の外から[情報災害指定]が自分を凝視していた」と主張していた。簡易記憶改変装置を用いて「サイト-81NZの食堂には窓がない」という欺瞞記憶を植え付けた。\n\n結果: 記憶改変後、対象はサイト-81NZの食堂の厨房に設置された棚の陰から[情報災害指定]が自分を凝視していた」と主張した。\n\n分析: SCP-11NZ-JPは記憶改変によってその内容を変化させることが判明した。この性質を利用すればSCP-11NZ-JP内の[情報災害指定]に干渉できる可能性がある。"
+        },
+        {
+          "id": "exp-004",
+          "default": "実験 11NZ-JP-004\n\n日付: 20██/09/10\nステータス: 承認済み、実験中止\n\n目的: 記憶補強薬を用いてSCP-11NZ-JPの記憶欠落領域を調査する。\n\n実験器具: Dクラス職員1名、記憶補強薬（予備含む）\n\n手続: 記憶補強薬を投与したDクラス1名をSCP-11NZ-JPに曝露させる、その後インタビューを実施し、記憶欠落領域について陳述させる。必要に応じて記憶観察装置を用いてSCP-11NZ-JPの調査を行う。\n\n分析: [検閲済み、詳細はインシデント記録11NZ-JPを参照(要クリアランスレベル3)]\n\n結論: [検閲済み、詳細はインシデント記録11NZ-JPを参照(要クリアランスレベル3)]"
+        },
+        {
+          "id": "exp-005",
+          "default": "実験 11NZ-JP-005\n\n日付: 20██/11/13\nステータス: 承認済み、実験進行中\n\n目的: エピソード記憶が存在しない曝露者に対して、SCP-11NZ-JPがどのような挙動を示すのかの調査。\n\n実験器具: 記憶処理が行われたDクラス1名、簡易記憶改変装置\n\n観察: N/A\n\n分析: N/A\n\n結論: N/A"
+        }
+      ],
+      "links": [
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-ogari"
+        }
+      ]
+    },
+    "notices-ogari": {
+      "id": "notices-ogari",
+      "type": "webpage",
+      "template": "scp-notices",
+      "title": "お知らせ",
+      "noticeTarget": "ogari",
+      "sections": [
+        {
+          "id": "notice-1",
+          "default": "20██-10-30\n10:██:██\nfrom: 記録・情報保安管理局（RAISA）\n\n実験11NZ-JP-005が承認されました。"
+        },
+        {
+          "id": "notice-2",
+          "default": "20██-11-13\n16:██:██\nfrom: 赤羽 隆二（サイト-81NZ管理官）\n\n現在サイト-81NZにてSCP-11NZ-JPの収容違反が発生しています。\nこれに伴いサイトに広域記憶処理剤の散布を行いました。\n各職員は自身の担当するオブジェクトの収容状態を確実なものにした後、避難プロトコルに則って避難を行ってください。\nなお、この際SCP-11NZ-JP蔓延を防止するため会話は禁じられています。"
+        },
+        {
+          "id": "notice-3",
+          "default": "20██-11-13\n16:██:██\nfrom: 記録・情報保安管理局（RAISA）\n\nクリアランスレベル3が付与されました。"
+        }
+      ],
+      "links": [
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-ogari"
+        }
+      ]
+    },
+    "meme-dev-page": {
+      "id": "meme-dev-page",
+      "type": "webpage",
+      "template": "scp-report",
+      "title": "SCP-11NZ-JP 対抗ミーム開発ページ",
+      "sections": [
+        {
+          "id": "main-content",
+          "default": "このファイルは險倬鹸繝ｻ諠??菫晏ｮ臥ｮ｡逅?ｱ?によってロックされています。\nミームの接種にはパスワードを入力してください。\nパスワードは全角カタカナで入力してください。",
+          "variants": [
+            {
+              "condition": {
+                "type": "flag",
+                "flag": "special_meme_active",
+                "value": true
+              },
+              "content": "[太字: ⚡ 対抗ミーム接種完了]\n\n[画像: /images/meme/special-meme.jpg]\n\n特殊ミームの接種が完了しました。\n[赤文字: 報告書を読み返してみましょう。]これまで見えなかった情報が浮かび上がっているはずです。"
+            }
+          ]
+        }
+      ],
+      "modals": {
+        "meme-password-input": {
+          "type": "form",
+          "title": "パスワードを入力",
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "ノイズ",
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "パスワードを認証しました。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "そのまま待機してください……",
+                      "speed": 50
+                    }
+                  ]
+                },
+                {
+                  "type": "set_flag",
+                  "flag": "special_meme_active",
+                  "value": true
+                },
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "[画像: /images/meme/special-meme.jpg]",
+                      "speed": 30
+                    },
+                    {
+                      "text": "特殊ミームの接種が完了しました。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "これで報告書に隠された情報が見えるようになったはずだ。",
+                      "speed": 40
+                    }
+                  ]
+                },
+                {
+                  "type": "navigate",
+                  "target": "personal-ogari"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "パスワードが間違っています。",
+                  "speed": 40
+                }
+              ]
+            },
+            "targetField": "password"
+          },
+          "fields": [
+            {
+              "id": "password",
+              "label": "下のグリッドから1文字ずつ選択してください",
+              "inputType": "charpick",
+              "slotLength": 3,
+              "pickCols": 5,
+              "pickChars": [
+                "ノ",
+                "イ",
+                "ズ",
+                "カ",
+                "キ",
+                "ク",
+                "ケ",
+                "コ",
+                "サ",
+                "シ",
+                "ス",
+                "セ",
+                "ソ",
+                "ナ",
+                "ニ"
+              ]
+            }
+          ]
+        }
+      },
+      "links": [
+        {
+          "label": "パスワードを入力する",
+          "action": {
+            "type": "modal",
+            "modalId": "meme-password-input"
+          },
+          "availableWhen": {
+            "type": "not",
+            "condition": {
+              "type": "flag",
+              "flag": "special_meme_active",
+              "value": true
+            }
+          }
+        },
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-ogari"
+        }
+      ]
+    },
+    "room-explore": {
+      "id": "room-explore",
+      "type": "room",
+      "background": "/images/rooms/room-overview.png",
+      "map": {
+        "areaId": "scp-facility",
+        "label": "部屋",
+        "connections": {}
+      },
+      "hotspots": [
+        {
+          "id": "id-card-hiraragi",
+          "x": 200,
+          "y": 720,
+          "width": 90,
+          "height": 50,
+          "label": "社員証",
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "[画像: /images/items/id-card-hiraragi.png]",
+                    "speed": 30
+                  },
+                  {
+                    "text": "社員証だ。「平良木研究員」と書いてある。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "QRコードが印刷されている。これを使えば平良木研究員のアカウントにログインできるかもしれない。",
+                    "speed": 40
+                  }
+                ]
+              },
+              {
+                "type": "add_item",
+                "itemId": "id_card_hiraragi"
+              },
+              {
+                "type": "set_flag",
+                "flag": "found_hiraragi_id",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "crumpled-memo",
+          "x": 100,
+          "y": 130,
+          "width": 130,
+          "height": 80,
+          "label": "白い紙",
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "[画像: /images/items/crumpled-memo.png]",
+                    "speed": 30
+                  },
+                  {
+                    "text": "くしゃくしゃに丸められたメモだ。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "暗号のようなものが描いてある……何かに使えるかもしれない。取っておこう。",
+                    "speed": 40
+                  }
+                ]
+              },
+              {
+                "type": "add_item",
+                "itemId": "crumpled_memo"
+              },
+              {
+                "type": "set_flag",
+                "flag": "found_memo",
+                "value": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "go-to-hiraragi-login",
+          "x": 0,
+          "y": 220,
+          "width": 110,
+          "height": 130,
+          "label": "ノートPC",
+          "action": {
+            "type": "conditional",
+            "condition": {
+              "type": "and",
+              "conditions": [
+                {
+                  "type": "has_item",
+                  "itemId": "id_card_hiraragi"
+                },
+                {
+                  "type": "has_item",
+                  "itemId": "crumpled_memo"
+                }
+              ]
+            },
+            "then": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "ノートPCの画面が点いている。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "どのアカウントでログインするか選ぼう。",
+                      "speed": 40
+                    }
+                  ]
+                },
+                {
+                  "type": "navigate",
+                  "target": "pc-account-select"
+                }
+              ]
+            },
+            "else": {
+              "type": "conditional",
+              "condition": {
+                "type": "not",
+                "condition": {
+                  "type": "has_item",
+                  "itemId": "id_card_hiraragi"
+                }
+              },
+              "then": {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "ノートPCの画面が点いている。SCiPNETのログイン画面が表示されている。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "別のIDカードがあれば、別のアカウントにログインできるかもしれない。部屋を調べてみよう。",
+                    "speed": 40
+                  }
+                ]
+              },
+              "else": {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "ノートPCの画面が点いている。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "……まだこの部屋に何か手がかりがありそうだ。一通り調べてからログインしよう。",
+                    "speed": 40
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "memory-device",
+          "x": 130,
+          "y": 70,
+          "width": 200,
+          "height": 90,
+          "label": "簡易記憶改変装置",
+          "action": {
+            "type": "conditional",
+            "condition": {
+              "type": "flag",
+              "flag": "memory_device_unlocked",
+              "value": true
+            },
+            "then": {
+              "type": "modal",
+              "modalId": "device-target-select"
+            },
+            "else": {
+              "type": "modal",
+              "modalId": "memory-device-input"
+            }
+          },
+          "condition": {
+            "type": "current_part",
+            "op": "gte",
+            "value": 4
+          }
+        },
+        {
+          "id": "fallen-supervisor",
+          "x": 80,
+          "y": 600,
+          "width": 250,
+          "height": 164,
+          "label": "倒れている平良木研究員",
+          "action": {
+            "type": "play_novel",
+            "dialogues": [
+              {
+                "text": "倒れている平良木研究員。",
+                "speed": 40
+              },
+              {
+                "text": "彼に何か干渉するには、簡易記憶改変装置を使うしかなさそうだ。",
+                "speed": 40
+              }
+            ]
+          },
+          "condition": {
+            "type": "current_part",
+            "op": "gte",
+            "value": 4
+          }
+        },
+        {
+          "id": "supervisor-note",
+          "x": 250,
+          "y": 130,
+          "width": 90,
+          "height": 80,
+          "label": "机のメモ",
+          "condition": {
+            "type": "current_part",
+            "op": "gte",
+            "value": 3
+          },
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "壁に走り書きのメモが貼られている。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "------",
+                    "speed": 50
+                  },
+                  {
+                    "text": "[太字: SCiPNET セキュリティ通達]",
+                    "speed": 50
+                  },
+                  {
+                    "text": "パスワードを連続で3回間違えると、不正アクセス防止のためクラス3ミーム殺害エージェントが画面に表示されます。",
+                    "speed": 30
+                  },
+                  {
+                    "text": "対抗ミームを接種していない職員は、不用意な誤入力に注意してください。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "------",
+                    "speed": 50
+                  },
+                  {
+                    "text": "……これは使えるかもしれない。",
+                    "speed": 50
+                  }
+                ]
+              },
+              {
+                "type": "add_item",
+                "itemId": "security_memo"
+              },
+              {
+                "type": "set_flag",
+                "flag": "found_security_memo",
+                "value": true
+              }
+            ]
+          }
+        }
+      ],
+      "modals": {
+        "memory-device-input": {
+          "type": "input",
+          "title": "簡易記憶改変装置 - 起動コード",
+          "content": "起動コードを入力してください。",
+          "placeholder": "起動ID(数字4桁)",
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "6345",
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "memory_device_unlocked",
+                  "value": true
+                },
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "認証成功。簡易記憶改変装置が起動した。",
+                      "speed": 40
+                    }
+                  ]
+                },
+                {
+                  "type": "modal",
+                  "modalId": "device-target-select"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "起動コードが違います。",
+                  "speed": 40
+                }
+              ]
+            }
+          }
+        },
+        "device-target-select": {
+          "type": "form",
+          "title": "簡易記憶改変装置",
+          "description": "誰に使用しますか？",
+          "fields": [
+            {
+              "id": "target",
+              "inputType": "select",
+              "label": "対象",
+              "options": [
+                "自分",
+                "倒れている平良木研究員"
+              ]
+            }
+          ],
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "倒れている平良木研究員",
+            "targetField": "target",
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "device_used_on_supervisor",
+                  "value": true
+                },
+                {
+                  "type": "navigate",
+                  "target": "memory-flashback-1"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "自分に簡易記憶改変装置を使用した。",
+                  "speed": 40
+                },
+                {
+                  "text": "……何も起きない。",
+                  "speed": 50
+                },
+                {
+                  "text": "他の対象を選んでみよう。",
+                  "speed": 40
+                }
+              ]
+            },
+            "closeOnIncorrect": true
+          }
+        }
+      }
+    },
+    "login-hiraragi": {
+      "id": "login-hiraragi",
+      "type": "webpage",
+      "template": "scp-login",
+      "title": "SCiPNET直結端末へようこそ。",
+      "fields": {
+        "username": {
+          "value": "hiraragi",
+          "editable": false
+        },
+        "password": {
+          "value": "********",
+          "editable": false
+        }
+      },
+      "modals": {
+        "alt-password-input": {
+          "type": "input",
+          "title": "パスワードを変更してログイン",
+          "content": "別のパスワードでログインを試みます。",
+          "placeholder": "パスワードを入力",
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "____never_match____",
+            "onCorrect": {
+              "type": "noop"
+            },
+            "onIncorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "increment",
+                  "counter": "hiraragi_login_attempts"
+                },
+                {
+                  "type": "conditional",
+                  "condition": {
+                    "type": "and",
+                    "conditions": [
+                      {
+                        "type": "flag",
+                        "flag": "logged_in_terrorist",
+                        "value": true
+                      },
+                      {
+                        "type": "counter",
+                        "counter": "hiraragi_login_attempts",
+                        "op": "gte",
+                        "value": 3
+                      }
+                    ]
+                  },
+                  "then": {
+                    "type": "trigger",
+                    "event": "meme_kill_agent"
+                  },
+                  "else": {
+                    "type": "play_novel",
+                    "dialogues": [
+                      {
+                        "text": "認証を受け付けました。ユーザー情報を照会中……失敗。",
+                        "speed": 40
+                      },
+                      {
+                        "text": "パスワードが間違っています。",
+                        "speed": 40
+                      },
+                      {
+                        "text": "失敗回数: {counter:hiraragi_login_attempts}",
+                        "speed": 50
+                      },
+                      {
+                        "text": "正しい認証情報を入力してください。",
+                        "speed": 40
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "links": [
+        {
+          "label": "ログイン",
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "認証を受け付けました。ユーザー情報を照会中……認証成功。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "ようこそ　平良木　研究員様。",
+                    "speed": 40
+                  }
+                ]
+              },
+              {
+                "type": "set_flag",
+                "flag": "logged_in_hiraragi",
+                "value": true
+              },
+              {
+                "type": "navigate",
+                "target": "personal-hiraragi"
+              }
+            ]
+          }
+        },
+        {
+          "label": "別のパスワードでログインしてみる",
+          "action": {
+            "type": "modal",
+            "modalId": "alt-password-input"
+          }
+        },
+        {
+          "label": "← 部屋に戻る",
+          "target": "room-explore"
+        }
+      ]
+    },
+    "personal-hiraragi": {
+      "id": "personal-hiraragi",
+      "type": "webpage",
+      "template": "scp-personal",
+      "title": "平良木研究員 個人ページ",
+      "links": [
+        {
+          "label": "インシデント11NZ-JP",
+          "target": "incident-11nz"
+        },
+        {
+          "label": "お知らせ",
+          "target": "notices-hiraragi"
+        },
+        {
+          "label": "解答フォーム",
+          "action": {
+            "type": "modal",
+            "modalId": "answer-part1-2"
+          },
+          "availableWhen": {
+            "type": "not",
+            "condition": {
+              "type": "flag",
+              "flag": "part1_2_cleared",
+              "value": true
+            }
+          }
+        },
+        {
+          "label": "🔓 鉄錆の果実教団 - チャット",
+          "target": "terrorist-chat",
+          "availableWhen": {
+            "type": "flag",
+            "flag": "logged_in_terrorist",
+            "value": true
+          }
+        },
+        {
+          "label": "← 部屋に戻る",
+          "target": "room-explore",
+          "availableWhen": {
+            "type": "visited",
+            "sceneId": "room-explore"
+          }
+        },
+        {
+          "label": "↺ ログアウト",
+          "target": "pc-account-select"
+        }
+      ],
+      "modals": {
+        "answer-part1-2": {
+          "type": "form",
+          "title": "パート1-2 解答フォーム",
+          "description": "現在の状況は「インシデント11NZ-JP」の状況に近い。\nおそらく目の前で倒れている研究員が記憶［　　　］薬を投与された状態でSCP-11NZ-JPに曝露したのだろう。",
+          "fields": [
+            {
+              "id": "q1",
+              "label": "記憶［　　　］薬",
+              "placeholder": "漢字2文字"
+            }
+          ],
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "補強",
+            "targetField": "q1",
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "part1_2_cleared",
+                  "value": true
+                },
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "今の状況は報告書にあるインシデント11NZ-JPと似ている。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "きっとここに倒れている平良木ってやつが「記憶補強薬」を飲まされたんだろう。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "今、この建物の中に人型実体とやらがいるはずだ。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "どうにかしてこの収容違反を終わらせなければ……",
+                      "speed": 40
+                    }
+                  ]
+                },
+                {
+                  "type": "set_part",
+                  "part": 2
+                },
+                {
+                  "type": "navigate",
+                  "target": "part2-intro"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "何かが間違っている気がする。",
+                  "speed": 40
+                },
+                {
+                  "text": "もう一度報告書を読んでみよう。",
+                  "speed": 40
+                }
+              ]
+            }
+          }
+        }
+      },
+      "onEnter": {
+        "type": "conditional",
+        "condition": {
+          "type": "current_part",
+          "op": "eq",
+          "value": 2
+        },
+        "then": {
+          "type": "add_notice",
+          "target": "hiraragi",
+          "noticeId": "terrorist-msg-hiraragi",
+          "content": "20██-11-13 19:██:██\nfrom: 險倬鹸繝ｻ諠??菫晏ｮ臥ｮ｡逅?ｱ?\n\n予定通りSCP-11NZ-JPの収容違反を発生させた。\n各員は定められたルートでサイト-81NZから脱出しろ。\n情報共有は以下のサイトで行う。\n\n[リンク: terrorist-login | ▶ 暗号化通信ネットワークへアクセス]\n\nログイン時の鍵はSCP-11NZ-JPのクリアランスレベル1向け報告書に記載してある。\n事前に特殊ミームQ3-4Uを摂取した諸君なら見えるはずだ。\nもし財団潜入中の記憶処理で特殊ミームQ3-4Uが失われたものは\n例のメモに従ってSCP-11NZ-JP対抗ミームのページから再接種しろ。"
+        },
+        "else": {
+          "type": "noop"
+        }
+      }
+    },
+    "incident-11nz": {
+      "id": "incident-11nz",
+      "type": "webpage",
+      "template": "scp-report",
+      "title": "インシデント11NZ-JP",
+      "sections": [
+        {
+          "id": "main-content",
+          "default": "インシデント11NZ-JP\n日付: 20██/09/10\n\n場所: サイト-81NZ実験C棟2階内第一実験室\n\n目的: SCP-11NZ-JPで見られる記憶欠落領域の調査\n\n手続き: 記憶補強薬を投与したDクラス1名をSCP-11NZ-JPに曝露させる、その後インタビューを実施し、記憶欠落領域について陳述させる。\n\n結果: 記憶補強薬を投与されたD-1870109は他の曝露者と同様、過去に[情報災害指定]が自身のことを視認していたと主張しました。インタビュアーが[情報災害指定]が現れた最も古い記憶から、時系列に沿って記憶を陳述するよう指示を行うと、D-1870109は問題なくこれを行いました。D-1870109は記憶補強薬を投与されており、完全なエピソード記憶の想起能力を有しているにも関わらず、[情報災害指定]の外見を明確に説明できなかった点は特筆に値します。D-1870109は記憶の陳述を続け、他の曝露者が記憶の健忘を起こしている領域の想起を始めました。\n以下はD-1870109の記憶の陳述の様子です。\n\n<前略>\n\nインタビュアー: D-1870109、次に[情報災害指定]を認識したのはいつですか？\n\nD-1870109: ああ……なあ博士、これってまだ続けなきゃ駄目なのか？あんまり思い出したくないっていうか、すげえ嫌な予感がするんだよ。\n\nインタビュアー: 命令です。記憶の陳述を続けてください。\n\nD-1870109: わかったよ、畜生。あー……、次にアイツを見つけたのは、そうだ、このサイトに連れてこられた最中だ。お前らの車に乗せられて、このサイトに入るとき、アイツは俺が下りたばっかの車の中からこっちを見てきたんだ。案の定、体半分だけ出してさ、血の気の無い顔でずっと……俺は何も見えないふりしてこのサイトに入ったんだ。次に見たのは、そうだ、一昨日だ。アイツは……クソッ、俺がぶち込まれてた部屋の扉の向こう、格子窓からこっちを見ていやがった。最悪だ。アイツ……なあ博士、一つ気づいたんだ、いいか？\n\nインタビュアー: なんでしょう？\n\nD-1870109: アイツ、俺を見てくるアイツは……だんだん俺に近づいてきてたんだ。過去からだんだんさかのぼって、俺の方に近づいてる。博士、俺マジでこれ以上続けたくないんだ。後生だよ。頼む、もうやめてくれ。\n\nインタビュアー: 申し訳ありませんが、その提案を受け入れることはできません。記憶の陳述を続けてください。命令に従わない場合、あなたの終了措置を行います。\n\nD-1870109: クソ野郎。マジで知らねえぞ。次にアイツを見たのは……ああ、そうだ、ついさっきだ。この実験が始まったあとすぐ、そこにある扉の陰から、お、俺を見ていやがった。もうすぐそこにいたんだ。その次は……ああ。\n\nインタビュアー: D-1870109？\n\nD-1870109: いま、俺の後ろにいるんだ。\n\n<記録中断>\n\nD-1870109の発言の直後、身長約3mの人型実体が実験室内に出現しました。当該実体の出現と同時にD-1870109および、当該実体を視認したインタビュアーは意識を喪失しました。異常を検知した保安部門から通報を受けたサイトの警備員4名が実験室に急行しましたが、当該実体との遭遇直後に意識を喪失しています。その後、当該実体は壁などの物理的な障壁を透過しながら移動を開始、遭遇した職員の意識を奪いながらサイト-81NZ実験C棟2階内を周遊しました。これを受けたサイト管理官によって収容違反宣言がなされ、実験棟Cの物理的ロックダウンとメトカーフ非実体反射力場発生装置による当該実体の封じ込め措置を行いました。封じ込めは成功し、当該実体は現在もサイト-81NZ実験C棟内にとどまっています。当該実体を物理的に破壊することの是非や手段については現在検討中です。また、当該実体によって意識を奪われた職員は水や食料などの補給がないにも関わらず、生命活動が継続しています。\n\n分析: SCP-11NZ-JPの目的は曝露者の過去の記憶を改変しながら近づき、最終的には現実改変によって自身を顕現させることであるという仮説が立てられました。曝露者が[情報災害指定]の容姿を詳細に思い出せないことや、直近の記憶が思い出せなくなることは曝露者自身が無意識的に行っている防衛反応であると推測されます。本インシデントを受け、記憶補強薬を用いた実験は禁止されます。"
+        }
+      ],
+      "links": [
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-hiraragi"
+        }
+      ]
+    },
+    "notices-hiraragi": {
+      "id": "notices-hiraragi",
+      "type": "webpage",
+      "template": "scp-notices",
+      "title": "お知らせ（平良木研究員）",
+      "noticeTarget": "hiraragi",
+      "sections": [
+        {
+          "id": "notice-1",
+          "default": "20██-10-30\n10:██:██\nfrom: 記録・情報保安管理局（RAISA）、倫理委員会\n\n実験11NZ-JP-005が承認されました。\nD-152701の自伝的記憶の削除が承認されました。"
+        },
+        {
+          "id": "notice-2",
+          "default": "20██-11-6\n10:██:██\nfrom: 記録・情報保安管理局（RAISA）\n\n簡易記憶処理装置の起動IDを告知します。\n起動ID: 6345"
+        },
+        {
+          "id": "notice-3",
+          "default": "20██-11-13\n16:██:██\nfrom: 赤羽 隆二（サイト-81NZ管理官）\n\n現在サイト-81NZにてSCP-11NZ-JPの収容違反が発生しています。\nこれに伴いサイトに広域記憶処理剤の散布を行いました。\n各職員は自身の担当するオブジェクトの収容状態を確実なものにした後、避難プロトコルに則って避難を行ってください。\nなお、この際SCP-11NZ-JP蔓延を防止するため会話は禁じられています。"
+        }
+      ],
+      "links": [
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-hiraragi"
+        }
+      ]
+    },
+    "part2-intro": {
+      "id": "part2-intro",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "尾狩研究員のお知らせに、新しいメッセージが届いている。",
+          "speed": 40
+        },
+        {
+          "text": "差出人は文字化けしているが、内容は明らかに財団内部のものではない。",
+          "speed": 40
+        },
+        {
+          "text": "差出人は別のサイトにログインするよう指示している。",
+          "speed": 40
+        },
+        {
+          "text": "ログインの鍵は「報告書のどこかに記載されている」とのことだが……",
+          "speed": 40
+        },
+        {
+          "text": "「事前に特殊ミームを摂取していれば見える」らしい。",
+          "speed": 40
+        },
+        {
+          "text": "対抗ミーム開発ページから何かを摂取できるかもしれない。",
+          "speed": 40
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "personal-ogari"
+      }
+    },
+    "terrorist-login": {
+      "id": "terrorist-login",
+      "type": "webpage",
+      "template": "scp-login",
+      "title": "暗号化通信ネットワーク - セキュアアクセス",
+      "modals": {
+        "terrorist-password-input": {
+          "type": "input",
+          "title": "認証コードを入力",
+          "placeholder": "例: ABC",
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "FEO",
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "logged_in_terrorist",
+                  "value": true
+                },
+                {
+                  "type": "set_part",
+                  "part": 3
+                },
+                {
+                  "type": "wait",
+                  "duration": 1500,
+                  "message": "認証コードを照合中..."
+                },
+                {
+                  "type": "wait",
+                  "duration": 1500,
+                  "message": "暗号化通信を確立中..."
+                },
+                {
+                  "type": "wait",
+                  "duration": 1500,
+                  "message": "チャットルームに接続中..."
+                },
+                {
+                  "type": "navigate",
+                  "target": "terrorist-chat"
+                },
+                {
+                  "type": "play_novel",
+                  "dialogues": [
+                    {
+                      "text": "「鉄錆の果実教団」のチャットルームに侵入した。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "なるほど、テロリストの組織内通信に接続できたわけか。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "こいつらの計画を止めるには、こちらから何らかの干渉が必要だ。",
+                      "speed": 40
+                    },
+                    {
+                      "text": "チャットページに張り付けるだけでこいつらを足止めできる「何か」があればいいが……そんなものあるのか？",
+                      "speed": 40
+                    }
+                  ]
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "パスワードが間違っています。",
+                  "speed": 40
+                }
+              ]
+            }
+          },
+          "content": "アルファベット大文字 3字"
+        }
+      },
+      "links": [
+        {
+          "label": "認証コードを入力",
+          "action": {
+            "type": "modal",
+            "modalId": "terrorist-password-input"
+          }
+        },
+        {
+          "label": "← 戻る",
+          "target": "personal-ogari"
+        }
+      ],
+      "sections": [
+        {
+          "id": "info",
+          "default": "暗号化通信ネットワーク\n\n認証コードを入力してアクセスを開始してください。"
+        }
+      ]
+    },
+    "terrorist-chat": {
+      "id": "terrorist-chat",
+      "type": "webpage",
+      "template": "scp-chat",
+      "title": "鉄錆の果実教団 - チャットページ",
+      "sections": [
+        {
+          "id": "chat-log",
+          "messages": [
+            {
+              "speaker": "アルファ",
+              "body": "予定通りオオワラシを現実に顕現させた。全員いるか？"
+            },
+            {
+              "speaker": "ベータ",
+              "body": "無事です。"
+            },
+            {
+              "speaker": "チャーリー",
+              "body": "同じく。すでに合流地点に到着済み。"
+            },
+            {
+              "speaker": "アルファ",
+              "body": "俺はもう少しかかる。平良木の野郎、無駄に抵抗しやがって。おかげで俺らのパスワードのヒントになるメモを落としちまった。"
+            },
+            {
+              "speaker": "司令部",
+              "body": "長期間の潜入ご苦労だった。財団連中の様子はどうだ？"
+            },
+            {
+              "speaker": "アルファ",
+              "body": "全員オオワラシの影響下に入ってるはずだ。今頃記憶の中で必死にヤツから逃げ回ってるだろうさ。収容違反に乗じて上手いこと脱出できた。"
+            },
+            {
+              "speaker": "司令部",
+              "body": "首尾よく済ませてくれたようで何より。オオワラシは現実世界からでは触れることすらできない。記憶の中の本体をどうにかできなければ、財団の対応も遅れるだろう。全員が過去の一切の記憶を失う覚悟があるならば話は別だが。"
+            },
+            {
+              "speaker": "ベータ",
+              "body": "財団から盗む予定だったオブジェクト類はどうなっていますか？"
+            },
+            {
+              "speaker": "チャーリー",
+              "body": "きっちり回収済み。リストを送る。"
+            },
+            {
+              "speaker": "チャーリー",
+              "attachment": {
+                "filename": "回収予定の物品リスト.txt",
+                "modalId": "recovery-list"
+              }
+            }
+          ],
+          "appendMessages": [
+            {
+              "condition": {
+                "type": "flag",
+                "flag": "terror_destroyed",
+                "value": true
+              },
+              "messages": [
+                {
+                  "type": "system",
+                  "body": "ミーム殺害エージェントが送信されました"
+                },
+                {
+                  "type": "system",
+                  "body": "全メンバーの応答が停止しました"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "confirmation",
+          "messages": [
+            {
+              "speaker": "司令部",
+              "body": "確認した。素晴らしい成果だ、諸君。特にSCP-24NZ-JPはオオワラシに対して特効になりうるオブジェクトだった。こいつを盗みだされたことはやつらにとっても大打撃だろう。諸君らの帰還を待っている。"
+            },
+            {
+              "speaker": "アルファ",
+              "body": "了解"
+            },
+            {
+              "speaker": "ベータ",
+              "body": "ありがとうございます。承知しました。"
+            },
+            {
+              "speaker": "チャーリー",
+              "body": "アイアイサー"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "label": "ミーム殺害エージェントを送信する",
+          "availableWhen": {
+            "type": "flag",
+            "flag": "has_meme_kill_image",
+            "value": true
+          },
+          "action": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "ミーム殺害エージェントの画像をチャットに送信した。",
+                    "speed": 30
+                  },
+                  {
+                    "text": "……。",
+                    "speed": 80
+                  },
+                  {
+                    "text": "チャットの全メンバーの応答が停止した。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "うまくいったのだろうか……？",
+                    "speed": 50
+                  }
+                ]
+              },
+              {
+                "type": "set_flag",
+                "flag": "terror_destroyed",
+                "value": true
+              },
+              {
+                "type": "navigate",
+                "target": "part3-complete"
+              }
+            ]
+          }
+        },
+        {
+          "label": "← 個人ページに戻る",
+          "target": "personal-ogari"
+        },
+        {
+          "label": "← 部屋に戻る",
+          "target": "room-explore"
+        }
+      ],
+      "modals": {
+        "recovery-list": {
+          "type": "text",
+          "title": "回収予定の物品リスト",
+          "content": "[太字: SCP-1887-JP]\n管理担当: 西槇研究員\n回収状況: 成功\n概要: SCP-1887-JPは人間の体内に侵入した際、対象を死亡させ急速に分解する植物の種子である。分解された死体は堆肥となり、放置すると様々な植物が発生する。かつて教団から簒奪された物品の一つ。\n\n[太字: SCP-XXXX-JP（アイテムNo割り当てなし）]\n管理担当: 赤羽サイト-81NZ管理官\n回収状況: 失敗\n概要: 蓋を開けられると周囲の空間を完全に隔離して周囲の人間を閉じ込める箱。現在詳細が研究中であり、アイテムNoが割り当てられていない。閉じ込められた空間の中では殺人事件が発生するが、詳細不明。収容違反作戦前にサイト-88MMに輸送されたため、回収はできなかった。\n\n[太字: SCP-24NZ-JP]\n管理担当: 平良木研究員\n回収状況: 成功\n概要: SCP-24NZ-JPは一振りの打刀である。刀身の長さは70.8cmであり、銘は刻まれていない。SCP-24NZ-JPの刀身は非物質変異無効効果を帯びており、レベルIII-β霊的実体を容易に切断可能である。\n\n[太字: SCP-18NZ-JP]\n管理担当: 平良木研究員\n回収状況: 成功\n概要: SCP-18NZ-JPは不可視の蜘蛛である。SCP-18NZ-JPが作る巣に動物の頭部が接触するとSCP-18NZ-JPに記憶を喰われ、直近数時間の記憶を失う。SCP-18NZ-JPの巣に短時間で複数回接触すると、記憶を失う期間が延びていく。"
+        }
+      }
+    },
+    "part3-complete": {
+      "id": "part3-complete",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "残るはSCP-11NZ-JPだ。",
+          "speed": 40
+        },
+        {
+          "text": "倒れている平良木研究員の隣で、簡易記憶改変装置が起動を待っている。",
+          "speed": 40
+        }
+      ],
+      "onComplete": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "set_part",
+            "part": 4
+          },
+          {
+            "type": "navigate",
+            "target": "part4-intro"
+          }
+        ]
+      }
+    },
+    "part4-intro": {
+      "id": "part4-intro",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "倒れている平良木研究員の隣で、簡易記憶改変装置が起動を待っている。",
+          "speed": 40
+        },
+        {
+          "text": "あの装置を使えば、何かが分かるかもしれない。",
+          "speed": 40
+        },
+        {
+          "text": "起動IDは平良木研究員のお知らせに記載されていた。",
+          "speed": 40
+        },
+        {
+          "text": "部屋に戻って、装置を起動しよう。",
+          "speed": 40
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "room-explore"
+      }
+    },
+    "memory-flashback-1": {
+      "id": "memory-flashback-1",
+      "type": "novel",
+      "background": "/images/memories/kiokunonaka.png",
+      "dialogues": [
+        {
+          "text": "[画像: /images/memories/kiokunonaka.png]",
+          "speed": 30
+        },
+        {
+          "text": "平良木研究員が部屋の扉の前でおののいている。",
+          "speed": 40
+        },
+        {
+          "text": "平良木「尾狩……お前……なぜ私に記憶補強薬を盛った！！」",
+          "speed": 40,
+          "speaker": "平良木研究員"
+        },
+        {
+          "text": "尾狩「平良木さん？何を言ってるんですか？」",
+          "speed": 40,
+          "speaker": "尾狩研究員"
+        },
+        {
+          "text": "平良木「とぼけるな！！前回の実験で使った予備の記憶補強薬を私に投与しただろう！！何が目的だ！！」",
+          "speed": 40,
+          "speaker": "平良木研究員"
+        },
+        {
+          "text": "尾狩「……」",
+          "speed": 60,
+          "speaker": "尾狩研究員"
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "memory-flashback-2"
+      }
+    },
+    "memory-flashback-2": {
+      "id": "memory-flashback-2",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "[画像: /images/memories/kiokunonaka-01.png]",
+          "speed": 30
+        },
+        {
+          "text": "尾狩「平良木さん、さっき俺の後ろの扉の向こう、何かいませんでしたか？」",
+          "speed": 40,
+          "speaker": "尾狩研究員"
+        },
+        {
+          "text": "平良木「……やめろ」",
+          "speed": 50,
+          "speaker": "平良木研究員"
+        },
+        {
+          "text": "尾狩「アレは近づいてくるんですよ。過去から未来に」",
+          "speed": 40,
+          "speaker": "尾狩研究員"
+        },
+        {
+          "text": "尾狩「俺には見えませんが、あんたには見えていたはずだ」",
+          "speed": 40,
+          "speaker": "尾狩研究員"
+        },
+        {
+          "text": "平良木「お前……」",
+          "speed": 50,
+          "speaker": "平良木研究員"
+        },
+        {
+          "text": "尾狩「俺は鉄錆の果実教団、あんたたちクソッタレの財団に、地獄を見てもらう」",
+          "speed": 30,
+          "speaker": "尾狩研究員"
+        },
+        {
+          "text": "平良木「……この！！」",
+          "speed": 50,
+          "speaker": "平良木研究員"
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "memory-flashback-3"
+      }
+    },
+    "memory-flashback-3": {
+      "id": "memory-flashback-3",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "[画像: /images/memories/kiokunonaka-02.png]",
+          "speed": 30
+        },
+        {
+          "text": "平良木研究員が尾狩研究員につかみかかった瞬間、背後から伸びた手につかまれて映像がブラックアウトする。",
+          "speed": 40
+        },
+        {
+          "text": "……。",
+          "speed": 80
+        },
+        {
+          "text": "「尾狩 実」を名乗っていたこの男は、テロリストだった。",
+          "speed": 40
+        },
+        {
+          "text": "そして、平良木研究員は、SCP-11NZ-JPに襲われたのだ。",
+          "speed": 40
+        }
+      ],
+      "onComplete": {
+        "type": "navigate",
+        "target": "memory-modify-prompt"
+      }
+    },
+    "memory-modify-prompt": {
+      "id": "memory-modify-prompt",
+      "type": "webpage",
+      "template": "scp-report",
+      "title": "簡易記憶改変装置",
+      "sections": [
+        {
+          "id": "main",
+          "default": "記憶の再生が終わりました。\n\n記憶を改変しますか？\n\n改変することで、平良木研究員の記憶を書き換え、現状を変える可能性があります。"
+        }
+      ],
+      "modals": {
+        "modify-form": {
+          "type": "form",
+          "title": "記憶改変フォーム",
+          "description": "平良木研究員の記憶を以下のように改変します。",
+          "fields": [
+            {
+              "id": "s1",
+              "inputType": "sentence",
+              "template": "{a}研究員の記憶を「SCP-{b}-JPを持った自分が、人型実体を撃退した」と改変する。",
+              "blanks": {
+                "a": {
+                  "id": "q1",
+                  "placeholder": "",
+                  "width": "100px"
+                },
+                "b": {
+                  "id": "q2",
+                  "placeholder": "",
+                  "width": "100px"
+                }
+              }
+            }
+          ],
+          "onSubmit": {
+            "type": "check_answer",
+            "correct": "",
+            "corrects": {
+              "q1": "平良木",
+              "q2": "24NZ"
+            },
+            "onCorrect": {
+              "type": "sequence",
+              "steps": [
+                {
+                  "type": "set_flag",
+                  "flag": "memory_modified",
+                  "value": true
+                },
+                {
+                  "type": "navigate",
+                  "target": "ending"
+                }
+              ]
+            },
+            "onIncorrect": {
+              "type": "play_novel",
+              "dialogues": [
+                {
+                  "text": "改変内容が正しくないようだ。報告書を見直してみよう。",
+                  "speed": 40
+                }
+              ]
+            }
+          }
+        }
+      },
+      "links": [
+        {
+          "label": "はい、記憶を改変する",
+          "action": {
+            "type": "modal",
+            "modalId": "modify-form"
+          }
+        },
+        {
+          "label": "いいえ、戻る",
+          "target": "room-explore"
+        }
+      ]
+    },
+    "ending": {
+      "id": "ending",
+      "type": "novel",
+      "dialogues": [
+        {
+          "text": "記憶の中の俺は、存外あっさり化け物退治に成功した。",
+          "speed": 50
+        },
+        {
+          "text": "記憶の中の本体を殺されたオブジェクトは実体化したヤツも含めて消滅。",
+          "speed": 40
+        },
+        {
+          "text": "収容違反は鎮圧された。",
+          "speed": 40
+        },
+        {
+          "text": "……。",
+          "speed": 80
+        },
+        {
+          "text": "騒動の原因となったテロリスト、鉄錆の果実教団のメンバーはサイト-81NZ近くの廃屋の中から死体で発見された。",
+          "speed": 40
+        },
+        {
+          "text": "その中には「尾狩 実」の偽名で財団に潜入していたメンバーもいたらしい。",
+          "speed": 40
+        },
+        {
+          "text": "事件後、詳細を調べた博士たちによると、この収容違反の対処はかなり奇跡的な要素が重なったらしい。",
+          "speed": 40
+        },
+        {
+          "text": "裏切りものだった「尾狩 実」のIDを、俺が拾ったこと。",
+          "speed": 40
+        },
+        {
+          "text": "俺の記憶が実験のために削除されていたせいで、SCP-11NZ-JPの影響を受けなかったこと。",
+          "speed": 40
+        },
+        {
+          "text": "平良木研究員が研究していたSCP-24NZ-JPが、SCP-11NZ-JPの特効となるオブジェクトだったこと。",
+          "speed": 40
+        },
+        {
+          "text": "様々な奇跡が重なって、この騒動は幕を閉じた。",
+          "speed": 40
+        },
+        {
+          "text": "ああそう、奇跡で言えばもう一つ……",
+          "speed": 60,
+          "fade": 0.4
+        },
+        {
+          "text": "……。",
+          "speed": 120,
+          "fade": 1
+        }
+      ],
+      "onComplete": {
+        "type": "sequence",
+        "steps": [
+          {
+            "type": "wait",
+            "duration": 1500,
+            "message": ""
+          },
+          {
+            "type": "navigate",
+            "target": "ending-credit"
+          }
+        ]
+      }
+    },
+    "ending-credit": {
+      "id": "ending-credit",
+      "type": "webpage",
+      "template": "letter",
+      "title": "辞令",
+      "fields": {
+        "date": {
+          "value": "20███年11月20日",
+          "editable": false
+        },
+        "recipient": {
+          "value": "D-231787",
+          "editable": false
+        },
+        "fromOrg": {
+          "value": "サイト-81NZ",
+          "editable": false
+        },
+        "fromPerson": {
+          "value": "管理官　赤羽　隆二",
+          "editable": false
+        },
+        "title": {
+          "value": "任 命 書",
+          "editable": false
+        },
+        "body": {
+          "value": "SCP-11NZ-JPの収容違反鎮圧の功績を受け、貴殿をDクラス職員から\nCクラス職員に任命します。今後はエージェントとしていっそう勤務に励み\n人類の存続と正常性の維持に貢献してください。",
+          "editable": false
+        }
+      },
+      "links": [
+        {
+          "label": "タイトル画面に戻る",
+          "target": "intro-letter"
+        }
+      ]
+    },
+    "pc-account-select": {
+      "id": "pc-account-select",
+      "type": "webpage",
+      "template": "scp-login",
+      "title": "SCiPNET 直結端末",
+      "sections": [
+        {
+          "id": "info",
+          "default": "ログインに使用する社員証を選択してください。\nIDカードのQRコードをスキャナーにかざすことでログインできます。"
+        }
+      ],
+      "links": [
+        {
+          "label": "🪪 尾狩研究員のIDカード",
+          "target": "login-ogari"
+        },
+        {
+          "label": "🪪 平良木研究員のIDカード",
+          "target": "login-hiraragi",
+          "availableWhen": {
+            "type": "has_item",
+            "itemId": "id_card_hiraragi"
+          }
+        }
+      ]
+    },
+    "intro-letter": {
+      "id": "intro-letter",
+      "type": "webpage",
+      "template": "letter",
+      "title": "辞令",
+      "fields": {
+        "date": {
+          "value": "20██年11月13日",
+          "editable": false
+        },
+        "recipient": {
+          "value": "尾狩　実",
+          "editable": false
+        },
+        "fromOrg": {
+          "value": "サイト-81NZ",
+          "editable": false
+        },
+        "fromPerson": {
+          "value": "管理官　赤羽　隆二",
+          "editable": false
+        },
+        "title": {
+          "value": "任 命 書",
+          "editable": false
+        },
+        "body": {
+          "value": "SCP-11NZ-JPの収容違反に伴い、貴殿にクリアランスレベル3を付与する。\n手元の資料を参照し、SCP-11NZ-JPの再収用に尽力されたし。",
+          "editable": false
+        }
+      },
+      "links": [
+        {
+          "label": "業務を開始する",
+          "target": "pc-account-select",
+          "availableWhen": {
+            "type": "not_visited",
+            "sceneId": "personal-ogari"
+          }
+        },
+        {
+          "label": "閉じる",
+          "target": "personal-ogari",
+          "availableWhen": {
+            "type": "visited",
+            "sceneId": "personal-ogari"
+          }
+        }
+      ]
+    }
+  },
+  "eventRegistry": {
+    "meme_kill_agent": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "set_flag",
+          "flag": "meme_kill_seen",
+          "value": true
+        },
+        {
+          "type": "play_novel",
+          "dialogues": [
+            {
+              "text": "[赤文字: ▼ ▼ ▼ 警告 ▼ ▼ ▼]",
+              "speed": 30
+            },
+            {
+              "text": "[赤文字: 不正アクセス検知]",
+              "speed": 30
+            },
+            {
+              "text": "[赤文字: クラス3ミーム殺害エージェントを起動します……]",
+              "speed": 30
+            },
+            {
+              "text": "ピー──ッ……",
+              "speed": 80
+            },
+            {
+              "text": "[画像: /images/meme/meme-kill-agent.png]",
+              "speed": 30
+            },
+            {
+              "text": "[赤文字: ［█████████████████████████］]",
+              "speed": 30
+            },
+            {
+              "text": "視界が反転する。",
+              "speed": 50,
+              "fade": 0.3
+            },
+            {
+              "text": "脳の奥に火花が散ったような感覚。",
+              "speed": 50,
+              "fade": 0.55
+            },
+            {
+              "text": "意識が急速に遠のいていく……",
+              "speed": 60,
+              "fade": 0.85
+            },
+            {
+              "text": "……。",
+              "speed": 100,
+              "fade": 1
+            },
+            {
+              "text": "……目の前が暗い。",
+              "speed": 70,
+              "fade": 0.7
+            },
+            {
+              "text": "なんとか意識を取り戻した。",
+              "speed": 40,
+              "fade": 0
+            }
+          ]
+        },
+        {
+          "type": "conditional",
+          "condition": {
+            "type": "or",
+            "conditions": [
+              {
+                "type": "current_part",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "type": "flag",
+                "flag": "logged_in_terrorist",
+                "value": true
+              }
+            ]
+          },
+          "then": {
+            "type": "sequence",
+            "steps": [
+              {
+                "type": "play_novel",
+                "dialogues": [
+                  {
+                    "text": "画面にミーム殺害エージェントの画像が表示されたままだ。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "……これは、使えるかもしれない。",
+                    "speed": 40
+                  },
+                  {
+                    "text": "[太字: 画像データを保存した。]",
+                    "speed": 50
+                  }
+                ]
+              },
+              {
+                "type": "set_flag",
+                "flag": "has_meme_kill_image",
+                "value": true
+              },
+              {
+                "type": "add_item",
+                "itemId": "meme_kill_image"
+              }
+            ]
+          },
+          "else": {
+            "type": "play_novel",
+            "dialogues": [
+              {
+                "text": "画面にミーム殺害エージェントの画像が表示されたままだ。",
+                "speed": 40
+              }
+            ]
+          }
+        },
+        {
+          "type": "navigate",
+          "target": "login-hiraragi"
+        }
+      ]
+    }
+  },
+  "itemRegistry": {
+    "id_card_hiraragi": {
+      "id": "id_card_hiraragi",
+      "name": "平良木の社員証",
+      "icon": "🪪",
+      "image": "/images/items/id-card-hiraragi.png",
+      "description": "平良木研究員の社員証。QRコードが印刷されており、SCiPNETにログインできる。"
+    },
+    "crumpled_memo": {
+      "id": "crumpled_memo",
+      "name": "くしゃくしゃのメモ",
+      "icon": "📝",
+      "image": "/images/items/crumpled-memo.png",
+      "description": "丸められた紙片。何かのヒントが書かれているようだ。"
+    },
+    "meme_kill_image": {
+      "id": "meme_kill_image",
+      "name": "ミーム殺害エージェント",
+      "icon": "☠️",
+      "image": "/images/meme/meme-kill-agent.png",
+      "description": "クラス3ミーム殺害エージェントの画像データ。テロリストへの対抗手段になり得る。"
+    },
+    "security_memo": {
+      "id": "security_memo",
+      "name": "セキュリティ通達",
+      "icon": "📋",
+      "description": "壁に貼られていた走り書きのメモ。\n\n「パスワードを連続で3回間違えると、不正アクセス防止のためクラス3ミーム殺害エージェントが画面に表示されます。\n対抗ミームを接種していない職員は、不用意な誤入力に注意してください。」"
+    }
+  }
+}

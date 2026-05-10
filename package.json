@@ -1,0 +1,32 @@
+{
+  "name": "incident007",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "prettier": "^3.5.0",
+    "turbo": "^2.5.0",
+    "typescript": "^5.8.0"
+  },
+  "dependencies": {
+    "@pixi/react": "^8.0.5",
+    "next": "^16.2.4",
+    "pixi.js": "^8.18.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "zustand": "^5.0.12"
+  }
+}
